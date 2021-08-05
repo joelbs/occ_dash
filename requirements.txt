@@ -1,6 +1,4 @@
 altair==4.1.0
-numpy @ file:///C:/ci/numpy_and_numpy_base_1603466732592/work
 openpyxl==3.0.3
 pandas==1.0.3
 pandas-dedupe==1.4.0
-plotly @ file:///tmp/build/80754af9/plotly_1610565580232/work
