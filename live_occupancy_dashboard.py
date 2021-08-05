@@ -163,7 +163,7 @@ def main():
 
 @st.cache
 def load_xl():
-    df = pd.concat(pd.read_excel(xl_file, sheet_name=None, header=None, usecols = "A:G", index_col=0, names=["Office #","Desks","Type","Suite","Status","Price","Client"]))
+    df = pd.concat(pd.read_excel(xl_file, engine="openpyxl", sheet_name=None, header=None, usecols = "A:G", index_col=0, names=["Office #","Desks","Type","Suite","Status","Price","Client"]))
     df.replace(["WIndow","Wndow","window"],"Window",inplace=True)
     df.replace(["Inteior","Inteiror","Interior "],"Interior",inplace=True)
     df.replace(["Compnay"],"Company",inplace=True)
