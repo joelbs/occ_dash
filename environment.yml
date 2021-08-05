@@ -1,6 +1,7 @@
 name: dash4
 channels:
   - defaults
+  - conda-forge
 dependencies:
   - python=3.9
   - streamlit=0.85.*
