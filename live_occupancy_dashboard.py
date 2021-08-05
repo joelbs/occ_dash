@@ -8,7 +8,7 @@ with st.sidebar:
     '''
     # Occupancy Spreadsheet Explorer
     '''
-    xl_file = st.file_uploader("Choose file to upload")
+    csv_file = st.file_uploader("Choose file to upload")
 
 def startup_screen():
     st.write('''
@@ -21,7 +21,7 @@ def startup_screen():
     ''')
 
 def main():
-    df = load_xl()
+    df = pd.read_csv(csv_file)
 
     # df.replace(["UCX3", "UCX9"], "UCXX", inplace=True)
     df.dropna(thresh=2,inplace=True)
@@ -159,22 +159,6 @@ def main():
 
     Z = df_x.loc[df_x["Desks"] == x]
     Z
-
-
-@st.cache
-def load_xl():
-    df = pd.concat(pd.read_excel(xl_file, sheet_name=None, header=None, usecols = "A:G", index_col=0, names=["Office #","Desks","Type","Suite","Status","Price","Client"]))
-    df.replace(["WIndow","Wndow","window"],"Window",inplace=True)
-    df.replace(["Inteior","Inteiror","Interior "],"Interior",inplace=True)
-    df.replace(["Compnay"],"Company",inplace=True)
-    df.replace(["Exeucitve"],"Executive",inplace=True)
-    df.replace(["Notice "],"Notice",inplace=True)
-    df = df[df["Suite"].isin(["Solo","Company","Executive"])]
-
-    df.reset_index(inplace=True)
-    df.rename(columns={"level_0":"Location"},inplace=True)
-
-    return df
 
 if __name__ == "__main__":
     main()
