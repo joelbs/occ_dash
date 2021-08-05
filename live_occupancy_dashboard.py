@@ -177,7 +177,4 @@ def load_xl():
     return df
 
 if __name__ == "__main__":
-    try:
-        main()
-    except:
-        startup_screen()
+    main()
