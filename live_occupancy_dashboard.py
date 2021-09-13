@@ -28,7 +28,7 @@ def main():
 
     '''## All offices, all locations'''
     df2 = df[df["Type"] != "Storage"].dropna().reset_index(drop=True)
-    df2 = df2[~df2["Location"].isin(["CPL","NHO","UMA","DTH+PARKING INFO","FWD","HUP"])]
+    df2 = df2[~df2["Location"].isin(["CPL","NHO","UMA","DTH+PARKING INFO","FWD","HUP","MB2"])]
     df2["Vacancy"] = df2["Status"]
     df2["Vacancy"].replace(
         ["Occupied", "Notice", "Pre-Leased"], "Occupied", inplace=True)
@@ -123,7 +123,7 @@ def main():
     df_d["Total"] = df_d["Occupied"] + df_d["Vacant"]
     df_d["Occupancy"] = df_d["Occupied"] / df_d["Total"]
 
-    df_d["% of Total"] = df_d["Total"] / df_d["Total"].sum()
+    df_d["% of Total"] = round((df_d["Total"] / df_d["Total"].sum()) * 100,1)
 
     df_d
     f'''Note: there are {df_d["Total"].sum()} available offices included in the above table. Unavailable offices, including staff, coworking, and storage, were excluded.'''
@@ -138,6 +138,11 @@ def main():
     df_x["Occupancy"] = df_x["Occupied"] / df_x["Total"]
 
     df_x["% of Total"] = df_x["Total"] / df_x["Total"].sum()
+
+    '''
+    ### Offices by desk count for all locations
+    '''
+    df_x
 
     locations = list(set(df_x["Location"]))
 
