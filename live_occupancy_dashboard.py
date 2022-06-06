@@ -1,3 +1,4 @@
+from string import digits
 import streamlit as st
 import pandas as pd
 import altair as alt
@@ -21,8 +22,10 @@ def startup_screen():
     ''')
 
 def main():
-    df = pd.read_csv(csv_file)
-
+    if csv_file:
+        df = pd.read_csv(csv_file, dtype={'Office #': 'str', 'Desks': 'Int64', 'Price': 'object'})
+    else:
+        return
     # df.replace(["UCX3", "UCX9"], "UCXX", inplace=True)
     df.dropna(thresh=2,inplace=True)
 
@@ -54,7 +57,7 @@ def main():
     '''#### Offices by vacancy'''
     st.text(df2.groupby(["Vacancy"]).size())
 
-    col1, col2 = st.beta_columns(2)
+    col1, col2 = st.columns(2)
     with col1:
         '''#### Total offices by desk count'''
         st.bar_chart(df2.groupby(["Desks"]).size())
@@ -82,7 +85,7 @@ def main():
         ).interactive())
 
 
-    col3, col4 = st.beta_columns(2)
+    col3, col4 = st.columns(2)
     with col3:
         '''#### Total offices by desk count by vacancy status'''
         st.altair_chart(alt.Chart(df2[df2["Vacancy"] != "Unavailable"][["Desks", "Office #","Vacancy"]]).mark_bar().encode(
@@ -108,8 +111,7 @@ def main():
     df_c.fillna(0,inplace=True)
     df_c["Total"] = df_c["Occupied"] + df_c["Vacant"]
     df_c["Occupancy"] = df_c["Occupied"] / df_c["Total"]
-    df_c
-
+    st.dataframe(df_c.style.format({"Occupancy":"{:.1%}"}))
 
     '''
     ### Offices by size (desk count) and vacancy status for all locations
@@ -123,9 +125,11 @@ def main():
     df_d["Total"] = df_d["Occupied"] + df_d["Vacant"]
     df_d["Occupancy"] = df_d["Occupied"] / df_d["Total"]
 
-    df_d["% of Total"] = round((df_d["Total"] / df_d["Total"].sum()) * 100,1)
+    df_d["Percent of Total"] = (df_d["Total"] / df_d["Total"].sum())
 
-    df_d
+    st.dataframe(df_d.style.format({"Percent of Total":"{:.1%}"}))
+
+
     f'''Note: there are {df_d["Total"].sum()} available offices included in the above table. Unavailable offices, including staff, coworking, and storage, were excluded.'''
 
 
@@ -166,4 +170,5 @@ def main():
     Z
 
 if __name__ == "__main__":
-    main()
+    if csv_file != False:
+        main()
